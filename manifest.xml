@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+  xsi:type="MailApp">
+  <Id>6973254b-34b2-43b0-9344-ece636ecbe4c</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Owen Allen</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Spinner Signature"/>
+  <Description DefaultValue="Adds a random Claude Code spinner verb to your email signature."/>
+  <IconUrl DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/"/>
+  <AppDomains>
+    <AppDomain>https://github.com/Alpine-Lakes-Digital/otlkSpinner</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <!-- Legacy section required by the schema; superseded by VersionOverrides below. -->
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/src/commands.html"/>
+        <RequestedHeight>250</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.10">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <!-- Event-based activation runtime.
+               Web, new Outlook, and Mac load commands.html.
+               Classic Outlook on Windows loads commands.js directly via the Override. -->
+          <Runtimes>
+            <Runtime resid="WebViewRuntime.Url">
+              <Override type="javascript" resid="JSRuntime.Url"/>
+            </Runtime>
+          </Runtimes>
+          <DesktopFormFactor>
+            <FunctionFile resid="Commands.Url"/>
+
+            <!-- "Re-roll verb" button on the ribbon while composing a message. -->
+            <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="spinnerSigGroup">
+                  <Label resid="GroupLabel"/>
+                  <Control xsi:type="Button" id="spinnerSigReroll">
+                    <Label resid="RerollButton.Label"/>
+                    <Supertip>
+                      <Title resid="RerollButton.Label"/>
+                      <Description resid="RerollButton.Tooltip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>rerollSignature</FunctionName>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+
+            <!-- Fires on every new message, reply, and forward. -->
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageComposeHandler"/>
+              </LaunchEvents>
+              <SourceLocation resid="WebViewRuntime.Url"/>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Images>
+          <bt:Image id="Icon.16x16" DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/assets/icon-16.png"/>
+          <bt:Image id="Icon.32x32" DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/assets/icon-32.png"/>
+          <bt:Image id="Icon.80x80" DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/assets/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="Commands.Url" DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/src/commands.html"/>
+          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/src/commands.html"/>
+          <bt:Url id="JSRuntime.Url" DefaultValue="https://github.com/Alpine-Lakes-Digital/otlkSpinner/src/commands.js"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="GroupLabel" DefaultValue="Spinner Signature"/>
+          <bt:String id="RerollButton.Label" DefaultValue="Re-roll verb"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="RerollButton.Tooltip" DefaultValue="Swap the spinner verb in your signature for a new random one."/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>

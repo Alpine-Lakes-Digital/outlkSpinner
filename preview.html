@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spinner Signature preview</title>
+<script src="src/commands.js"></script>
+<style>
+  body{font-family:'Segoe UI',Calibri,Arial,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#222}
+  .mail{border:1px solid #ddd;border-radius:8px;padding:20px;margin:16px 0;background:#fff}
+  button{font:inherit;padding:8px 14px;border-radius:6px;border:1px solid #D97757;background:#D97757;color:#fff;cursor:pointer}
+  small{color:#666}
+</style>
+</head>
+<body>
+  <h1>Spinner Signature preview</h1>
+  <p><small>Shows exactly what the add-in inserts, using the settings at the top of src/commands.js. Open this file in a browser, no Outlook needed.</small></p>
+  <div class="mail"><p>Hi there,</p><p>Here's the update you asked for.</p><p>Thanks,</p><div id="sig"></div></div>
+  <button onclick="roll()">Re-roll verb</button>
+  <script>
+    function roll(){ document.getElementById('sig').innerHTML = buildSignatureHtml(pickVerb()); }
+    roll();
+  </script>
+</body>
+</html>
